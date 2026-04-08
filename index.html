@@ -211,14 +211,17 @@ footer{padding:24px 40px;background:var(--dark);border-top:2px solid var(--pri);
 #cursorCanvas{position:fixed;inset:0;pointer-events:none;z-index:9998}
 
 /* === SCROLL REVEAL === */
-.reveal{opacity:0;transform:translateY(40px);transition:all .8s cubic-bezier(.16,1,.3,1)}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-left{opacity:0;transform:translateX(-40px);transition:all .8s cubic-bezier(.16,1,.3,1)}
-.reveal-left.visible{opacity:1;transform:translateX(0)}
-.reveal-right{opacity:0;transform:translateX(40px);transition:all .8s cubic-bezier(.16,1,.3,1)}
-.reveal-right.visible{opacity:1;transform:translateX(0)}
-.reveal-scale{opacity:0;transform:scale(.85);transition:all .8s cubic-bezier(.16,1,.3,1)}
-.reveal-scale.visible{opacity:1;transform:scale(1)}
+/* Scroll Reveal - applied via [data-reveal] */
+[data-reveal]{opacity:0;transform:translateY(50px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+[data-reveal="left"]{transform:translateX(-60px)}
+[data-reveal="right"]{transform:translateX(60px)}
+[data-reveal="scale"]{transform:scale(.8)}
+[data-reveal="up"]{transform:translateY(50px)}
+[data-reveal].revealed{opacity:1 !important;transform:none !important}
+
+/* Stagger children */
+[data-reveal-child]{opacity:0;transform:translateY(25px);transition:opacity .6s ease,transform .6s ease}
+[data-reveal-child].revealed{opacity:1;transform:none}
 
 /* === 3D TILT ON CARDS === */
 .tilt-card{transition:transform .15s ease;transform-style:preserve-3d;will-change:transform}
@@ -246,25 +249,13 @@ footer{padding:24px 40px;background:var(--dark);border-top:2px solid var(--pri);
 .hero-photo{position:relative;overflow:visible !important}.hero-photo::after{content:'';position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(from 0deg,#c9a96e,#8b5cf6,#d946ef,#c9a96e);animation:rotateBorder 4s linear infinite;z-index:-1}
 
 
-/* === PARALLAX BACKGROUND REVEAL === */
-#bgReveal{position:fixed;inset:0;z-index:-1;overflow:hidden}
-#bgReveal img{width:100%;height:100%;object-fit:cover;object-position:center 20%;filter:blur(3px) brightness(.35) saturate(.7);transform:scale(1.1);transition:filter 1s ease}
-#bgReveal::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,10,25,.85) 0%,rgba(30,16,51,.6) 30%,rgba(139,92,246,.08) 50%,rgba(30,16,51,.6) 70%,rgba(15,10,25,.9) 100%);pointer-events:none}
 
-/* Sections need backdrop for readability */
-.section{position:relative;z-index:1}
-.hero{position:relative;z-index:1}
-nav{position:relative;z-index:100}
-
-/* Parallax scroll: background moves slower */
-body{overflow-x:hidden}
 
 </style>
 </head>
 <div class="scroll-progress" id="scrollProgress"></div>
 <canvas id="cursorCanvas"></canvas>
 
-<div id="bgReveal"><img id="bgImg" src="" alt=""></div>
 <body>
 
 <!-- LOCK SCREEN -->
@@ -621,19 +612,51 @@ window.addEventListener('scroll',()=>{
   animate();
 })();
 
-// --- SCROLL REVEAL ---
+// --- SCROLL REVEAL (robust) ---
 (function(){
-  const els=document.querySelectorAll('.section, .cards-grid > .card, .contact-card');
-  els.forEach((el,i)=>{
-    el.classList.add(i%3===0?'reveal':i%3===1?'reveal-left':'reveal-right');
+  // Mark elements for reveal
+  const sections=document.querySelectorAll('.section');
+  const directions=['up','left','right','scale'];
+  sections.forEach((s,i)=>{
+    s.setAttribute('data-reveal',directions[i%4]);
+    s.style.transitionDelay=(i%3)*0.1+'s';
   });
-  const qrSec=document.querySelector('.section:has(img[alt="QR vCard"])');
-  if(qrSec)qrSec.classList.add('reveal-scale');
   
+  // Mark cards inside sections for staggered reveal
+  document.querySelectorAll('.cards-grid > .card, .contact-card, .ver-card').forEach((card,i)=>{
+    card.setAttribute('data-reveal-child','');
+    card.style.transitionDelay=(i%4)*0.15+'s';
+  });
+  
+  // Observer with rootMargin so it doesn't fire for elements already visible
   const obs=new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
-  },{threshold:.15});
-  document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el=>obs.observe(el));
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('revealed');
+        // Also reveal children with stagger
+        e.target.querySelectorAll('[data-reveal-child]').forEach((child,i)=>{
+          setTimeout(()=>child.classList.add('revealed'),i*150);
+        });
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.08,rootMargin:'0px 0px -80px 0px'});
+  
+  // Only observe elements NOT already in viewport (skip hero)
+  document.querySelectorAll('[data-reveal]').forEach(el=>{
+    const rect=el.getBoundingClientRect();
+    if(rect.top>window.innerHeight*0.7){
+      obs.observe(el);
+    } else {
+      // Already visible, reveal immediately but with slight delay
+      setTimeout(()=>{
+        el.classList.add('revealed');
+        el.querySelectorAll('[data-reveal-child]').forEach((c,i)=>{
+          setTimeout(()=>c.classList.add('revealed'),i*150);
+        });
+      },300);
+    }
+  });
 })();
 
 // --- 3D TILT ON CARDS ---
@@ -730,36 +753,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 })();
 
 
-// --- PARALLAX BACKGROUND REVEAL ---
-(function(){
-  const bgImg=document.getElementById('bgImg');
-  if(bgImg && typeof PHOTO_SRC!=='undefined'){
-    bgImg.src=PHOTO_SRC;
-  }
-  
-  // Parallax: background moves at different speed + blur changes on scroll
-  let ticking=false;
-  window.addEventListener('scroll',()=>{
-    if(!ticking){
-      requestAnimationFrame(()=>{
-        const scrollY=window.scrollY;
-        const maxScroll=document.documentElement.scrollHeight-window.innerHeight;
-        const pct=scrollY/maxScroll;
-        
-        // Move background slower (parallax)
-        if(bgImg){
-          bgImg.style.transform=`scale(1.1) translateY(${scrollY*.15}px)`;
-          // Reduce blur as user scrolls (reveal effect)
-          const blur=Math.max(0,3-pct*4);
-          const bright=.35+pct*.15;
-          bgImg.style.filter=`blur(${blur}px) brightness(${bright}) saturate(${.7+pct*.3})`;
-        }
-        ticking=false;
-      });
-      ticking=true;
-    }
-  });
-})();
+
 
 </script>
 
