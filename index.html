@@ -202,8 +202,53 @@ footer{padding:24px 40px;background:var(--dark);border-top:2px solid var(--pri);
   .cards-grid,.contact-grid{grid-template-columns:1fr}
   .cv-box{padding:28px 20px}.versions{gap:8px}
 }
+
+/* === SCROLL PROGRESS BAR === */
+.scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#8b5cf6,#c9a96e,#d946ef,#8b5cf6);background-size:300% 100%;animation:gradientShift 3s ease infinite;z-index:10000;transition:width .1s;width:0}
+@keyframes gradientShift{0%{background-position:0%}50%{background-position:100%}100%{background-position:0%}}
+
+/* === GOLD CURSOR TRAIL CANVAS === */
+#cursorCanvas{position:fixed;inset:0;pointer-events:none;z-index:9998}
+
+/* === SCROLL REVEAL === */
+.reveal{opacity:0;transform:translateY(40px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(40px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+.reveal-scale{opacity:0;transform:scale(.85);transition:all .8s cubic-bezier(.16,1,.3,1)}
+.reveal-scale.visible{opacity:1;transform:scale(1)}
+
+/* === 3D TILT ON CARDS === */
+.tilt-card{transition:transform .15s ease;transform-style:preserve-3d;will-change:transform}
+.tilt-card:hover{box-shadow:0 20px 40px rgba(139,92,246,.15) !important}
+.tilt-card *{transform:translateZ(20px)}
+
+/* === FLOATING PARTICLES IN HERO === */
+#heroParticles{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.particle{position:absolute;border-radius:50%;pointer-events:none;animation:floatUp linear infinite}
+@keyframes floatUp{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) rotate(720deg);opacity:0}}
+
+/* === MAGNETIC BUTTONS === */
+.btn-magnetic{transition:transform .2s ease}
+
+/* === EASTER EGG CONFETTI === */
+.confetti-piece{position:fixed;width:8px;height:8px;z-index:99999;pointer-events:none;animation:confettiFall 3s ease-out forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(1080deg)}}
+
+/* === GLOWING HOVER ON SECTION TITLES === */
+.section-title{transition:text-shadow .3s ease}
+.section-title:hover{text-shadow:0 0 20px rgba(139,92,246,.4),0 0 40px rgba(201,169,110,.2)}
+
+/* === ANIMATED BORDER ON HERO PHOTO === */
+@keyframes rotateBorder{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.hero-photo-wrap::after{content:'';position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(from 0deg,#c9a96e,#8b5cf6,#d946ef,#c9a96e);animation:rotateBorder 4s linear infinite;z-index:-1}
+
 </style>
 </head>
+<div class="scroll-progress" id="scrollProgress"></div>
+<canvas id="cursorCanvas"></canvas>
 <body>
 
 <!-- LOCK SCREEN -->
@@ -461,7 +506,7 @@ h2{font-family:'Cormorant Garamond',serif;font-size:15px;color:#333;margin-botto
       <div class="front-name">Valeria Batiz</div>
       <div class="front-sub2">Presentación Personal</div>
       <div class="front-line2"></div>
-      <div class="front-tag">"Compromiso, responsabilidad y buena predisposición"</div>
+      <div class="front-tag">"<span class="hero-phrase">Compromiso, responsabilidad y buena predisposición</span>"</div>
     </div>
     <div class="front-dia">❖</div>
   </div>
@@ -507,6 +552,167 @@ function printCards(){
 document.getElementById('cardsModal').addEventListener('click',function(e){if(e.target===this)closeCards()});
 
 document.getElementById('cvModal').addEventListener('click',function(e){if(e.target===this)closeCVModal()});
+
+/* ============================
+   EFFECTS ENGINE - April 2026
+   ============================ */
+
+// --- SCROLL PROGRESS BAR ---
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const pct=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100;
+  document.getElementById('scrollProgress').style.width=pct+'%';
+});
+
+// --- GOLD CURSOR TRAIL ---
+(function(){
+  const canvas=document.getElementById('cursorCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let w,h,particles=[];
+  function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight}
+  resize();
+  window.addEventListener('resize',resize);
+  
+  class Particle{
+    constructor(x,y){
+      this.x=x;this.y=y;
+      this.size=Math.random()*3+1.5;
+      this.life=1;
+      this.decay=Math.random()*.03+.02;
+      this.vx=(Math.random()-.5)*1.5;
+      this.vy=(Math.random()-.5)*1.5;
+      this.color=Math.random()>.5?'201,169,110':'139,92,246';
+    }
+    update(){this.x+=this.vx;this.y+=this.vy;this.life-=this.decay;this.size*=.97}
+    draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle=`rgba(${this.color},${this.life})`;ctx.fill()}
+  }
+  
+  let mx=0,my=0,lastMx=0,lastMy=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  
+  function animate(){
+    ctx.clearRect(0,0,w,h);
+    const dx=mx-lastMx,dy=my-lastMy;
+    if(Math.abs(dx)+Math.abs(dy)>2){
+      for(let i=0;i<3;i++)particles.push(new Particle(mx,my));
+    }
+    lastMx=mx;lastMy=my;
+    particles=particles.filter(p=>p.life>0);
+    particles.forEach(p=>{p.update();p.draw()});
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// --- SCROLL REVEAL ---
+(function(){
+  const els=document.querySelectorAll('.section, .card-group > div, .contact-card');
+  els.forEach((el,i)=>{
+    el.classList.add(i%3===0?'reveal':i%3===1?'reveal-left':'reveal-right');
+  });
+  const qrSec=document.querySelector('.section:has(img[alt="QR vCard"])');
+  if(qrSec)qrSec.classList.add('reveal-scale');
+  
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
+  },{threshold:.15});
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el=>obs.observe(el));
+})();
+
+// --- 3D TILT ON CARDS ---
+document.querySelectorAll('.card-group > div, .contact-card').forEach(card=>{
+  card.classList.add('tilt-card');
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`perspective(600px) rotateY(${x*12}deg) rotateX(${-y*12}deg)`;
+  });
+  card.addEventListener('mouseleave',()=>{card.style.transform=''});
+});
+
+// --- HERO FLOATING PARTICLES ---
+(function(){
+  const hero=document.querySelector('.hero');
+  if(!hero){return}
+  const container=document.createElement('div');
+  container.id='heroParticles';
+  hero.style.position='relative';
+  hero.insertBefore(container,hero.firstChild);
+  
+  function createParticle(){
+    const p=document.createElement('div');
+    p.classList.add('particle');
+    const size=Math.random()*4+2;
+    const isGold=Math.random()>.6;
+    p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${isGold?'rgba(201,169,110,.4)':'rgba(139,92,246,.3)'};animation-duration:${Math.random()*8+6}s;animation-delay:${Math.random()*5}s;${Math.random()>.7?'box-shadow:0 0 6px rgba(201,169,110,.3)':''}`;
+    container.appendChild(p);
+    setTimeout(()=>p.remove(),(Math.random()*8+6)*1000+5000);
+  }
+  for(let i=0;i<15;i++)setTimeout(()=>createParticle(),i*300);
+  setInterval(createParticle,800);
+})();
+
+// --- MAGNETIC BUTTONS ---
+document.querySelectorAll('.btn').forEach(btn=>{
+  btn.classList.add('btn-magnetic');
+  btn.addEventListener('mousemove',e=>{
+    const r=btn.getBoundingClientRect();
+    const x=e.clientX-r.left-r.width/2;
+    const y=e.clientY-r.top-r.height/2;
+    btn.style.transform=`translate(${x*.2}px,${y*.2}px)`;
+  });
+  btn.addEventListener('mouseleave',()=>{btn.style.transform=''});
+});
+
+// --- KONAMI CODE EASTER EGG (↑↑↓↓←→←→BA) ---
+(function(){
+  const code=[38,38,40,40,37,39,37,39,66,65];
+  let pos=0;
+  document.addEventListener('keydown',e=>{
+    if(e.keyCode===code[pos]){
+      pos++;
+      if(pos===code.length){
+        pos=0;
+        // CONFETTI EXPLOSION!
+        for(let i=0;i<80;i++){
+          const c=document.createElement('div');
+          c.classList.add('confetti-piece');
+          const colors=['#c9a96e','#8b5cf6','#d946ef','#e8d5a8','#a78bfa','#f0abfc'];
+          c.style.cssText=`left:${Math.random()*100}vw;top:-10px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.5?'50%':'2px'};width:${Math.random()*8+4}px;height:${Math.random()*8+4}px;animation-duration:${Math.random()*2+2}s;animation-delay:${Math.random()*.5}s`;
+          document.body.appendChild(c);
+          setTimeout(()=>c.remove(),4000);
+        }
+      }
+    } else pos=0;
+  });
+})();
+
+// --- SMOOTH SCROLL FOR NAV ---
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const target=document.querySelector(a.getAttribute('href'));
+    if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+
+// --- TYPEWRITER ON HERO (subtle) ---
+(function(){
+  const el=document.querySelector('.hero-phrase');
+  if(!el)return;
+  const text=el.textContent;
+  el.textContent='';
+  el.style.borderRight='2px solid rgba(139,92,246,.5)';
+  let i=0;
+  function type(){
+    if(i<text.length){el.textContent+=text[i];i++;setTimeout(type,40)}
+    else{setTimeout(()=>{el.style.borderRight='none'},1000)}
+  }
+  setTimeout(type,1500);
+})();
+
 </script>
 
 <!-- CARDS MODAL -->
