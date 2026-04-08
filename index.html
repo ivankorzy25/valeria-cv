@@ -303,9 +303,9 @@ footer{padding:24px 40px;background:var(--dark);border-top:2px solid var(--pri);
   <div class="section-sub">Escaneá el QR con tu celular</div>
   <div class="section-ornament"></div>
   <div style="max-width:500px;margin:0 auto;padding:30px;border-radius:24px;background:linear-gradient(135deg,#fff,var(--cream2));border:1px solid rgba(139,92,246,0.12);box-shadow:0 8px 30px rgba(139,92,246,0.06)">
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BEGIN:VCARD%0AVERSION:3.0%0AN:Batiz;Valeria%0AFN:Valeria Batiz%0ATEL;TYPE=CELL:%2B541154924291%0AEMAIL:valubatiz@gmail.com%0AADR;TYPE=HOME:;;Hipólito Yrigoyen 1584;Quilmes;Buenos Aires;;Argentina%0AEND:VCARD&color=6d28d9&bgcolor=faf8ff" alt="QR vCard" style="width:180px;height:180px;border-radius:16px;border:3px solid var(--pri-light);box-shadow:0 4px 15px rgba(139,92,246,0.15);margin-bottom:16px">
-    <p style="font-size:14px;color:var(--text-light);font-weight:300;margin-bottom:6px">Escaneá y se guardan todos mis datos de contacto</p>
-    <p style="font-size:11px;color:var(--pri);letter-spacing:2px;text-transform:uppercase;font-weight:500">Nombre · Teléfono · Email · Dirección</p>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://ivankorzy25.github.io/valeria-cv/card.html&color=6d28d9&bgcolor=faf8ff" alt="QR vCard" style="width:180px;height:180px;border-radius:16px;border:3px solid var(--pri-light);box-shadow:0 4px 15px rgba(139,92,246,0.15);margin-bottom:16px">
+    <p style="font-size:14px;color:var(--text-light);font-weight:300;margin-bottom:6px">Escaneá y se abre mi tarjeta digital con opción de guardar</p>
+    <p style="font-size:11px;color:var(--pri);letter-spacing:2px;text-transform:uppercase;font-weight:500">Tarjeta actualizable · Siempre con datos al día</p>
     <div style="margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
       <button class="btn btn-pri" onclick="openCards()">🃏 Ver Tarjetas Personales</button>
       <button class="btn btn-outline" onclick="printCards()">🖨 Imprimir Tarjetas</button>
@@ -411,7 +411,7 @@ function printCV(){
 }
 
 function getCardsHTML(){
-  const qr="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BEGIN:VCARD%0AVERSION:3.0%0AN:Batiz;Valeria%0AFN:Valeria Batiz%0ATEL;TYPE=CELL:%2B541154924291%0AEMAIL:valubatiz@gmail.com%0AADR;TYPE=HOME:;;Hipólito Yrigoyen 1584;Quilmes;Buenos Aires;;Argentina%0AEND:VCARD&color=6d28d9&bgcolor=faf8ff";
+  const qr="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://ivankorzy25.github.io/valeria-cv/card.html&color=6d28d9&bgcolor=faf8ff";
   return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Tarjeta Personal - Valeria Batiz</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
