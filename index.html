@@ -204,7 +204,7 @@ footer{padding:24px 40px;background:var(--dark);border-top:2px solid var(--pri);
 }
 
 /* === SCROLL PROGRESS BAR === */
-.scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#8b5cf6,#c9a96e,#d946ef,#8b5cf6);background-size:300% 100%;animation:gradientShift 3s ease infinite;z-index:10000;transition:width .1s;width:0}
+.scroll-progress{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,#8b5cf6,#c9a96e,#d946ef,#8b5cf6);background-size:300% 100%;animation:gradientShift 3s ease infinite;z-index:10000;transition:width .1s;width:0}
 @keyframes gradientShift{0%{background-position:0%}50%{background-position:100%}100%{background-position:0%}}
 
 /* === GOLD CURSOR TRAIL CANVAS === */
@@ -243,7 +243,7 @@ footer{padding:24px 40px;background:var(--dark);border-top:2px solid var(--pri);
 
 /* === ANIMATED BORDER ON HERO PHOTO === */
 @keyframes rotateBorder{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.hero-photo-wrap::after{content:'';position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(from 0deg,#c9a96e,#8b5cf6,#d946ef,#c9a96e);animation:rotateBorder 4s linear infinite;z-index:-1}
+.hero-photo{position:relative;overflow:visible !important}.hero-photo::after{content:'';position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(from 0deg,#c9a96e,#8b5cf6,#d946ef,#c9a96e);animation:rotateBorder 4s linear infinite;z-index:-1}
 
 </style>
 </head>
@@ -577,7 +577,7 @@ window.addEventListener('scroll',()=>{
   class Particle{
     constructor(x,y){
       this.x=x;this.y=y;
-      this.size=Math.random()*3+1.5;
+      this.size=Math.random()*4+2;
       this.life=1;
       this.decay=Math.random()*.03+.02;
       this.vx=(Math.random()-.5)*1.5;
@@ -595,7 +595,7 @@ window.addEventListener('scroll',()=>{
     ctx.clearRect(0,0,w,h);
     const dx=mx-lastMx,dy=my-lastMy;
     if(Math.abs(dx)+Math.abs(dy)>2){
-      for(let i=0;i<3;i++)particles.push(new Particle(mx,my));
+      for(let i=0;i<5;i++)particles.push(new Particle(mx,my));
     }
     lastMx=mx;lastMy=my;
     particles=particles.filter(p=>p.life>0);
@@ -607,7 +607,7 @@ window.addEventListener('scroll',()=>{
 
 // --- SCROLL REVEAL ---
 (function(){
-  const els=document.querySelectorAll('.section, .card-group > div, .contact-card');
+  const els=document.querySelectorAll('.section, .cards-grid > .card, .contact-card');
   els.forEach((el,i)=>{
     el.classList.add(i%3===0?'reveal':i%3===1?'reveal-left':'reveal-right');
   });
@@ -621,7 +621,7 @@ window.addEventListener('scroll',()=>{
 })();
 
 // --- 3D TILT ON CARDS ---
-document.querySelectorAll('.card-group > div, .contact-card').forEach(card=>{
+document.querySelectorAll('.cards-grid > .card, .contact-card, .ver-card').forEach(card=>{
   card.classList.add('tilt-card');
   card.addEventListener('mousemove',e=>{
     const r=card.getBoundingClientRect();
@@ -644,9 +644,9 @@ document.querySelectorAll('.card-group > div, .contact-card').forEach(card=>{
   function createParticle(){
     const p=document.createElement('div');
     p.classList.add('particle');
-    const size=Math.random()*4+2;
+    const size=Math.random()*6+3;
     const isGold=Math.random()>.6;
-    p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${isGold?'rgba(201,169,110,.4)':'rgba(139,92,246,.3)'};animation-duration:${Math.random()*8+6}s;animation-delay:${Math.random()*5}s;${Math.random()>.7?'box-shadow:0 0 6px rgba(201,169,110,.3)':''}`;
+    p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${isGold?'rgba(201,169,110,.7)':'rgba(139,92,246,.5)'};animation-duration:${Math.random()*8+6}s;animation-delay:${Math.random()*5}s;${Math.random()>.7?'box-shadow:0 0 6px rgba(201,169,110,.3)':''}`;
     container.appendChild(p);
     setTimeout(()=>p.remove(),(Math.random()*8+6)*1000+5000);
   }
