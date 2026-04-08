@@ -549,9 +549,9 @@ function printCards(){
   w.document.close();
   setTimeout(()=>w.print(),1500);
 }
-document.getElementById('cardsModal').addEventListener('click',function(e){if(e.target===this)closeCards()});
+var cm=document.getElementById('cardsModal');if(cm)cm.addEventListener('click',function(e){if(e.target===this)closeCards()});
 
-document.getElementById('cvModal').addEventListener('click',function(e){if(e.target===this)closeCVModal()});
+var cv=document.getElementById('cvModal');if(cv)cv.addEventListener('click',function(e){if(e.target===this)closeCVModal()});
 
 /* ============================
    EFFECTS ENGINE - April 2026
