@@ -424,7 +424,123 @@ function printCV(){
 
 function getCardsHTML(){
   const qr="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BEGIN:VCARD%0AVERSION:3.0%0AN:Batiz;Valeria%0AFN:Valeria Batiz%0ATEL;TYPE=CELL:%2B541154924291%0ATEL;TYPE=HOME:28365436%0AEMAIL:valubatiz@gmail.com%0AADR;TYPE=HOME:;;Hipólito Yrigoyen 1584;Quilmes;Buenos Aires;;Argentina%0AEND:VCARD&color=6d28d9&bgcolor=faf8ff";
-  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Tarjetas - Valeria Batiz</title><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"><style>@page{size:A4;margin:8mm}*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Jost',sans-serif;background:#fff;print-color-adjust:exact;-webkit-print-color-adjust:exact}.grid{display:grid;grid-template-columns:1fr 1fr;gap:3mm;padding:2mm}.card{width:85mm;height:55mm;border-radius:3mm;overflow:hidden;display:grid;grid-template-columns:22mm 1fr;border:0.5px solid #c4b5fd;position:relative;page-break-inside:avoid}.card-left{background:linear-gradient(175deg,#1e1033,#2d1f4e,#3b2d5c);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3mm 2mm;gap:2mm}.card-photo{width:16mm;height:16mm;border-radius:50%;border:1.5px solid rgba(139,92,246,0.4);object-fit:cover;object-position:center 20%}.card-qr{width:15mm;height:15mm;border-radius:2mm;border:1px solid rgba(139,92,246,0.3)}.card-right{padding:4mm 4mm 3mm;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(135deg,#faf8ff,#f5f0ff)}.card-name{font-family:'Cormorant Garamond',serif;font-size:13pt;font-weight:700;color:#1e1033;line-height:1.1;margin-bottom:1mm}.card-sub{font-size:6pt;text-transform:uppercase;letter-spacing:2px;color:#8b5cf6;margin-bottom:3mm}.card-line{height:0.3mm;background:linear-gradient(90deg,#8b5cf6,#d946ef,transparent);margin-bottom:2.5mm;border-radius:1mm;width:80%}.card-info{display:flex;align-items:center;gap:2mm;margin-bottom:1.5mm;font-size:7pt;color:#3e3555;font-weight:300}.card-info:last-child{margin-bottom:0}.card-icon{width:3.5mm;height:3.5mm;flex-shrink:0}.card-icon svg{width:100%;height:100%;stroke:#8b5cf6;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.card-label{font-size:5pt;color:#8b5cf6;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}@media print{body{margin:0}.grid{padding:0}}</style></head><body><div class="grid">${Array(10).fill('').map(()=>`<div class="card"><div class="card-left"><img class="card-photo" src="${PHOTO_SRC}" alt="VB"><img class="card-qr" src="${qr}" alt="QR"></div><div class="card-right"><div class="card-name">Valeria Batiz</div><div class="card-sub">Presentación Personal</div><div class="card-line"></div><div class="card-info"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></div>11 5492-4291 · 28365436</div><div class="card-info"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>valubatiz@gmail.com</div><div class="card-info"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>H. Yrigoyen 1584, Quilmes</div></div></div>`).join('')}</div></body></html>`;
+  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Tarjeta Personal - Valeria Batiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+@page{size:A4;margin:0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Jost',sans-serif;background:#f0ebf5;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;padding:40px;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+h2.title{font-family:'Cormorant Garamond',serif;font-size:28px;color:#1e1033;font-weight:700;text-align:center}
+p.sub{font-size:11px;text-transform:uppercase;letter-spacing:4px;color:#8b5cf6;text-align:center;margin-top:4px}
+.cards-wrap{display:flex;gap:50px;flex-wrap:wrap;justify-content:center;align-items:flex-start}
+
+/* === CARD CONTAINER === */
+.card-container{perspective:1200px;width:340px;height:200px;cursor:pointer}
+.card-container:hover .card-inner{transform:rotateY(180deg)}
+.card-inner{position:relative;width:100%;height:100%;transition:transform 0.8s cubic-bezier(0.4,0,0.2,1);transform-style:preserve-3d}
+.card-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;overflow:hidden}
+.card-back{transform:rotateY(180deg)}
+
+/* === GOLD BORDER EFFECT === */
+.gold-border{position:absolute;inset:0;border-radius:14px;border:2.5px solid transparent;background:linear-gradient(135deg,#c9a96e,#e8d5a8,#c9a96e,#b8944a,#e8d5a8,#c9a96e) border-box;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;z-index:10;pointer-events:none}
+.gold-inner{position:absolute;inset:5px;border-radius:10px;border:0.5px solid rgba(201,169,110,0.25);z-index:10;pointer-events:none}
+
+/* === FRONT === */
+.front{background:linear-gradient(160deg,#1e1033 0%,#2d1f4e 40%,#3b2d5c 70%,#2d1f4e 100%);color:#fff;display:flex;align-items:center;box-shadow:0 15px 40px rgba(30,16,51,0.3)}
+.front::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(139,92,246,0.12),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(201,169,110,0.08),transparent 50%)}
+.front-content{display:flex;align-items:center;gap:22px;padding:24px 28px;width:100%;position:relative;z-index:1}
+.front-photo{width:90px;height:90px;border-radius:50%;object-fit:cover;object-position:center 20%;border:2.5px solid rgba(201,169,110,0.4);box-shadow:0 4px 15px rgba(0,0,0,0.3);flex-shrink:0}
+.front-text{flex:1}
+.front-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;line-height:1.1;background:linear-gradient(135deg,#e8d5a8,#fff,#e8d5a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+.front-sub{font-size:8px;text-transform:uppercase;letter-spacing:4px;color:#c4b5fd;margin-bottom:10px}
+.front-line{width:50px;height:1.5px;background:linear-gradient(90deg,#c9a96e,#e8d5a8,transparent);margin-bottom:8px;border-radius:2px}
+.front-tagline{font-size:10px;color:rgba(255,255,255,0.5);font-weight:300;font-style:italic;letter-spacing:0.5px}
+.front-diamond{position:absolute;bottom:14px;right:20px;font-size:10px;color:rgba(201,169,110,0.3)}
+
+/* === BACK === */
+.back{background:linear-gradient(160deg,#faf8ff 0%,#f5f0ff 50%,#ede9fe 100%);color:#3e3555;display:flex;box-shadow:0 15px 40px rgba(30,16,51,0.15)}
+.back::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(139,92,246,0.06),transparent 50%)}
+.back-content{display:flex;align-items:center;gap:18px;padding:20px 24px;width:100%;position:relative;z-index:1}
+.back-left{flex:1}
+.back-title{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;color:#1e1033;margin-bottom:2px}
+.back-subtitle{font-size:6.5px;text-transform:uppercase;letter-spacing:3px;color:#8b5cf6;margin-bottom:10px}
+.back-line{width:40px;height:1px;background:linear-gradient(90deg,#c9a96e,transparent);margin-bottom:10px;border-radius:1px}
+.back-item{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:9px;color:#3e3555;font-weight:300}
+.back-item:last-child{margin-bottom:0}
+.back-ico{width:18px;height:18px;border-radius:5px;background:linear-gradient(135deg,#ede9fe,#ddd6fe);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:0.5px solid rgba(139,92,246,0.15)}
+.back-ico svg{width:10px;height:10px;stroke:#7c3aed;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.back-right{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0}
+.back-qr{width:72px;height:72px;border-radius:8px;border:2px solid rgba(201,169,110,0.3);box-shadow:0 2px 8px rgba(139,92,246,0.1)}
+.back-scan{font-size:6px;text-transform:uppercase;letter-spacing:2px;color:#8b5cf6;font-weight:500}
+
+.hint{text-align:center;font-size:12px;color:#8b80a0;font-weight:300;margin-top:-10px}
+.hint span{color:#8b5cf6}
+
+/* Corner ornament on front */
+.corner-orn{position:absolute;z-index:5}
+.corner-orn svg{width:24px;height:24px}
+.orn-tl{top:6px;left:6px}
+.orn-br{bottom:6px;right:6px;transform:rotate(180deg)}
+
+@media print{
+  body{background:#fff;padding:20px;gap:30px}
+  h2.title,p.sub,.hint{display:none}
+  .card-container{cursor:default}
+  .card-container:hover .card-inner{transform:none}
+  .card-inner{transform:none !important;position:static;display:flex;flex-direction:column;gap:20px;height:auto}
+  .card-face{position:static;backface-visibility:visible}
+  .card-back{transform:none}
+  .front,.back{box-shadow:none}
+}
+</style></head><body>
+<div>
+  <h2 class="title">Tarjeta Personal</h2>
+  <p class="sub">Pasá el mouse para ver ambos lados</p>
+</div>
+<div class="cards-wrap">
+  <div class="card-container">
+    <div class="card-inner">
+      <!-- FRONT -->
+      <div class="card-face front">
+        <div class="gold-border"></div>
+        <div class="gold-inner"></div>
+        <div class="corner-orn orn-tl"><svg viewBox="0 0 24 24"><path d="M2 22V8C2 4.7 4.7 2 8 2H22" fill="none" stroke="rgba(201,169,110,0.35)" stroke-width="1"/><circle cx="2" cy="22" r="1.2" fill="rgba(201,169,110,0.3)"/></svg></div>
+        <div class="corner-orn orn-br"><svg viewBox="0 0 24 24"><path d="M2 22V8C2 4.7 4.7 2 8 2H22" fill="none" stroke="rgba(201,169,110,0.35)" stroke-width="1"/><circle cx="2" cy="22" r="1.2" fill="rgba(201,169,110,0.3)"/></svg></div>
+        <div class="front-content">
+          <img class="front-photo" src="${PHOTO_SRC}" alt="VB">
+          <div class="front-text">
+            <div class="front-name">Valeria Batiz</div>
+            <div class="front-sub">Presentación Personal</div>
+            <div class="front-line"></div>
+            <div class="front-tagline">"Compromiso, responsabilidad y buena predisposición"</div>
+          </div>
+          <div class="front-diamond">❖</div>
+        </div>
+      </div>
+      <!-- BACK -->
+      <div class="card-face card-back back">
+        <div class="gold-border"></div>
+        <div class="gold-inner"></div>
+        <div class="back-content">
+          <div class="back-left">
+            <div class="back-title">Valeria Batiz</div>
+            <div class="back-subtitle">Datos de Contacto</div>
+            <div class="back-line"></div>
+            <div class="back-item"><div class="back-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>11 5492-4291 · Fijo: 28365436</div>
+            <div class="back-item"><div class="back-ico"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>valubatiz@gmail.com</div>
+            <div class="back-item"><div class="back-ico"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>H. Yrigoyen 1584, Quilmes</div>
+          </div>
+          <div class="back-right">
+            <img class="back-qr" src="${qr}" alt="QR">
+            <div class="back-scan">Escaneá</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="hint"><span>💜</span> Hacé click en <span>Imprimir</span> para guardarla como PDF o imprimirla</p>
+</body></html>`;
 }
 function openCards(){
   document.getElementById('cardsModal').classList.add('active');
