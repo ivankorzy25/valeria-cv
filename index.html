@@ -245,10 +245,26 @@ footer{padding:24px 40px;background:var(--dark);border-top:2px solid var(--pri);
 @keyframes rotateBorder{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 .hero-photo{position:relative;overflow:visible !important}.hero-photo::after{content:'';position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(from 0deg,#c9a96e,#8b5cf6,#d946ef,#c9a96e);animation:rotateBorder 4s linear infinite;z-index:-1}
 
+
+/* === PARALLAX BACKGROUND REVEAL === */
+#bgReveal{position:fixed;inset:0;z-index:-1;overflow:hidden}
+#bgReveal img{width:100%;height:100%;object-fit:cover;object-position:center 20%;filter:blur(3px) brightness(.35) saturate(.7);transform:scale(1.1);transition:filter 1s ease}
+#bgReveal::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,10,25,.85) 0%,rgba(30,16,51,.6) 30%,rgba(139,92,246,.08) 50%,rgba(30,16,51,.6) 70%,rgba(15,10,25,.9) 100%);pointer-events:none}
+
+/* Sections need backdrop for readability */
+.section{position:relative;z-index:1}
+.hero{position:relative;z-index:1}
+nav{position:relative;z-index:100}
+
+/* Parallax scroll: background moves slower */
+body{overflow-x:hidden}
+
 </style>
 </head>
 <div class="scroll-progress" id="scrollProgress"></div>
 <canvas id="cursorCanvas"></canvas>
+
+<div id="bgReveal"><img id="bgImg" src="" alt=""></div>
 <body>
 
 <!-- LOCK SCREEN -->
@@ -711,6 +727,38 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     else{setTimeout(()=>{el.style.borderRight='none'},1000)}
   }
   setTimeout(type,1500);
+})();
+
+
+// --- PARALLAX BACKGROUND REVEAL ---
+(function(){
+  const bgImg=document.getElementById('bgImg');
+  if(bgImg && typeof PHOTO_SRC!=='undefined'){
+    bgImg.src=PHOTO_SRC;
+  }
+  
+  // Parallax: background moves at different speed + blur changes on scroll
+  let ticking=false;
+  window.addEventListener('scroll',()=>{
+    if(!ticking){
+      requestAnimationFrame(()=>{
+        const scrollY=window.scrollY;
+        const maxScroll=document.documentElement.scrollHeight-window.innerHeight;
+        const pct=scrollY/maxScroll;
+        
+        // Move background slower (parallax)
+        if(bgImg){
+          bgImg.style.transform=`scale(1.1) translateY(${scrollY*.15}px)`;
+          // Reduce blur as user scrolls (reveal effect)
+          const blur=Math.max(0,3-pct*4);
+          const bright=.35+pct*.15;
+          bgImg.style.filter=`blur(${blur}px) brightness(${bright}) saturate(${.7+pct*.3})`;
+        }
+        ticking=false;
+      });
+      ticking=true;
+    }
+  });
 })();
 
 </script>
