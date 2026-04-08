@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1">
+<title>Valeria Batiz — Contacto</title>
+<meta name="description" content="Tarjeta de contacto digital de Valeria Batiz">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f0a1a;--card:#1a1128;--gold:#c9a96e;--gold2:#e8d5a8;--lila:#8b5cf6;--lila2:#a78bfa;--rose:#d946ef;--text:#e8e0f0;--text2:#9a8fb0}
+body{font-family:'Jost',sans-serif;background:var(--bg);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;color:var(--text)}
+
+.card{width:100%;max-width:400px;position:relative}
+
+/* Gold glow behind card */
+.card::before{content:'';position:absolute;inset:-2px;border-radius:26px;background:linear-gradient(135deg,var(--gold),var(--rose),var(--lila),var(--gold));opacity:.4;filter:blur(20px);z-index:0}
+
+.card-inner{position:relative;z-index:1;background:var(--card);border-radius:24px;overflow:hidden;border:1px solid rgba(201,169,110,.2);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+
+/* Header with photo */
+.header{background:linear-gradient(160deg,#1e1033,#2d1f4e);padding:40px 30px 30px;text-align:center;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(139,92,246,.15),transparent 60%)}
+.header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+.photo{width:120px;height:120px;border-radius:50%;object-fit:cover;object-position:center 20%;margin:0 auto 18px;display:block;border:3px solid rgba(201,169,110,.3);box-shadow:0 8px 25px rgba(0,0,0,.4);position:relative}
+
+.name{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;background:linear-gradient(135deg,var(--gold2),#fff,var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:6px}
+.subtitle{font-size:9px;text-transform:uppercase;letter-spacing:5px;color:var(--lila2)}
+
+.divider{width:60px;height:1.5px;background:linear-gradient(90deg,var(--gold),var(--rose));margin:16px auto 0;border-radius:2px}
+
+/* Contact items */
+.contacts{padding:28px 28px 12px}
+.c-item{display:flex;align-items:center;gap:16px;padding:14px 16px;margin-bottom:10px;border-radius:14px;background:rgba(139,92,246,.06);border:.5px solid rgba(139,92,246,.1);text-decoration:none;color:var(--text);transition:all .25s ease;cursor:pointer}
+.c-item:hover{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.25);transform:translateX(4px)}
+.c-item:active{transform:scale(.98)}
+.c-ico{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,rgba(139,92,246,.15),rgba(201,169,110,.1));display:flex;align-items:center;justify-content:center;flex-shrink:0;border:.5px solid rgba(201,169,110,.15)}
+.c-ico svg{width:20px;height:20px;stroke:var(--lila2);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.c-label{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--gold);font-weight:500;margin-bottom:2px}
+.c-val{font-size:14px;font-weight:300;color:var(--text)}
+.c-hint{font-size:10px;color:var(--text2);margin-top:1px}
+
+/* Save button */
+.actions{padding:8px 28px 28px}
+.save-btn{width:100%;padding:16px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--gold),#b8944a);color:#1a1128;font-family:'Jost',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .3s ease;box-shadow:0 4px 15px rgba(201,169,110,.25)}
+.save-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(201,169,110,.35)}
+.save-btn:active{transform:scale(.97)}
+.save-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.share-btn{width:100%;padding:14px;border:1px solid rgba(139,92,246,.25);border-radius:14px;background:transparent;color:var(--lila2);font-family:'Jost',sans-serif;font-size:13px;font-weight:400;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;transition:all .3s ease}
+.share-btn:hover{background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.4)}
+.share-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Footer */
+.footer{text-align:center;padding:0 28px 22px;font-size:10px;color:var(--text2);letter-spacing:1px}
+.footer a{color:var(--lila2);text-decoration:none}
+
+/* Toast notification */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card);border:1px solid var(--gold);color:var(--gold2);padding:14px 24px;border-radius:14px;font-size:13px;font-weight:400;z-index:100;transition:transform .4s ease;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* Pulse animation on photo */
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,.3)}50%{box-shadow:0 0 0 12px rgba(139,92,246,0)}}
+.photo{animation:pulse 3s ease-in-out infinite}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-inner">
+    <div class="header">
+      <img class="photo" id="photo" src="" alt="Valeria Batiz">
+      <div class="name">Valeria Batiz</div>
+      <div class="subtitle">Presentación Personal</div>
+      <div class="divider"></div>
+    </div>
+
+    <div class="contacts">
+      <a class="c-item" href="https://wa.me/5491154924291?text=Hola%20Valeria!%20Vi%20tu%20tarjeta%20de%20contacto">
+        <div class="c-ico"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
+        <div><div class="c-label">WhatsApp</div><div class="c-val">11 5492-4291</div><div class="c-hint">Tocá para enviar mensaje</div></div>
+      </a>
+      <a class="c-item" href="tel:+541154924291">
+        <div class="c-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></div>
+        <div><div class="c-label">Celular</div><div class="c-val">11 5492-4291</div><div class="c-hint">Tocá para llamar</div></div>
+      </a>
+      <a class="c-item" href="mailto:valubatiz@gmail.com?subject=Contacto%20-%20Valeria%20Batiz">
+        <div class="c-ico"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div><div class="c-label">Email</div><div class="c-val">valubatiz@gmail.com</div><div class="c-hint">Tocá para enviar email</div></div>
+      </a>
+      <a class="c-item" href="https://www.google.com/maps/search/Hipólito+Yrigoyen+1584,+Quilmes,+Provincia+de+Buenos+Aires/@-34.7243,-58.2535,15z" target="_blank">
+        <div class="c-ico"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><div class="c-label">Dirección</div><div class="c-val">H. Yrigoyen 1584, Quilmes</div><div class="c-hint">Tocá para ver en mapa</div></div>
+      </a>
+    </div>
+
+    <div class="actions">
+      <button class="save-btn" onclick="saveContact()">
+        <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+        GUARDAR EN MI AGENDA
+      </button>
+      <button class="share-btn" onclick="shareCard()">
+        <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Compartir esta tarjeta
+      </button>
+    </div>
+
+    <div class="footer">
+      <a href="https://ivankorzy25.github.io/valeria-cv/">Ver CV Completo →</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Load photo from main site's data
+document.getElementById('photo').src = 'https://ivankorzy25.github.io/valeria-cv/photo.jpg';
+// Fallback: placeholder
+document.getElementById('photo').onerror = function(){
+  this.src='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect fill="%231e1033" width="120" height="120" rx="60"/><text x="60" y="68" text-anchor="middle" fill="%23c9a96e" font-size="36" font-family="serif">VB</text></svg>';
+};
+
+function saveContact(){
+  const vcard = `BEGIN:VCARD
+VERSION:3.0
+N:Batiz;Valeria;;;
+FN:Valeria Batiz
+TEL;TYPE=CELL:+541154924291
+EMAIL:valubatiz@gmail.com
+ADR;TYPE=HOME:;;Hipólito Yrigoyen 1584;Quilmes;Buenos Aires;;Argentina
+URL:https://ivankorzy25.github.io/valeria-cv/card.html
+END:VCARD`;
+  const blob = new Blob([vcard],{type:'text/vcard;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Valeria_Batiz.vcf';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✅ Contacto descargado — abrí el archivo para guardar');
+}
+
+function shareCard(){
+  const url = 'https://ivankorzy25.github.io/valeria-cv/card.html';
+  if(navigator.share){
+    navigator.share({title:'Valeria Batiz — Contacto',text:'Tarjeta de contacto de Valeria Batiz',url:url});
+  } else {
+    navigator.clipboard.writeText(url).then(()=>{
+      showToast('📋 Link copiado al portapapeles');
+    });
+  }
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>
