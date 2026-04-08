@@ -407,94 +407,82 @@ function printCV(){
   const w=window.open('','_blank');
   w.document.write(getCVHTML().replace(/PHOTO_B64/g,PHOTO_SRC.split(',')[1]));
   w.document.close();
-  setTimeout(()=>w.print(),600);
+  setTimeout(()=>w.print(),1500);
 }
 
 function getCardsHTML(){
   const ph=PHOTO_SRC;
   const qr="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://ivankorzy25.github.io/valeria-cv/card.html&color=6d28d9&bgcolor=faf8ff";
-  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Tarjeta Personal - Valeria Batiz</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Tarjeta - Valeria Batiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-@page{size:A4;margin:10mm}
+@page{size:A4;margin:12mm}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Jost',sans-serif;background:#fff;display:flex;flex-direction:column;align-items:center;padding:10mm;gap:8mm;print-color-adjust:exact;-webkit-print-color-adjust:exact}
-h2{font-family:'Cormorant Garamond',serif;font-size:16px;color:#1e1033;margin-bottom:2mm}
-p.sub{font-size:9px;color:#8b5cf6;text-transform:uppercase;letter-spacing:3px;margin-bottom:6mm}
-.card{width:85mm;height:55mm;border-radius:3mm;overflow:hidden;position:relative;page-break-inside:avoid}
-.gold-frame{position:absolute;inset:0;border-radius:3mm;border:2px solid transparent;background:linear-gradient(135deg,#c9a96e,#e8d5a8,#c9a96e,#b8944a,#e8d5a8,#c9a96e) border-box;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;z-index:10;pointer-events:none}
-.gold-inner{position:absolute;inset:2mm;border-radius:2mm;border:.3px solid rgba(201,169,110,.2);z-index:10;pointer-events:none}
-.orn{position:absolute;z-index:11;opacity:.3}.orn svg{width:16px;height:16px}
-.orn-tl{top:3mm;left:3mm}.orn-br{bottom:3mm;right:3mm;transform:rotate(180deg)}
+body{font-family:'Jost',sans-serif;background:#fff;display:flex;flex-direction:column;align-items:center;padding:12mm;gap:6mm;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+h2{font-family:'Cormorant Garamond',serif;font-size:15px;color:#333;margin-bottom:1mm}
+.sub{font-size:8px;color:#999;letter-spacing:3px;text-transform:uppercase;margin-bottom:5mm}
+.label{font-size:7px;color:#aaa;text-transform:uppercase;letter-spacing:3px;margin-bottom:1mm}
+.cut{border:none;border-top:1px dashed #ccc;width:85mm;margin:0}
 
-.front{background:linear-gradient(160deg,#1e1033,#2d1f4e 40%,#3b2d5c 70%,#2d1f4e);color:#fff;display:flex;align-items:center}
-.front::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(139,92,246,.12),transparent 60%)}
-.front-content{display:flex;align-items:center;gap:5mm;padding:5mm 6mm;width:100%;position:relative;z-index:2}
-.front-photo{width:22mm;height:22mm;border-radius:50%;object-fit:cover;object-position:center 20%;border:1.5px solid rgba(201,169,110,.35);flex-shrink:0}
-.front-name{font-family:'Cormorant Garamond',serif;font-size:18pt;font-weight:700;line-height:1.1;background:linear-gradient(135deg,#e8d5a8,#fff,#e8d5a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1mm}
-.front-sub{font-size:6pt;text-transform:uppercase;letter-spacing:3px;color:#c4b5fd;margin-bottom:2mm}
-.front-line{width:15mm;height:1px;background:linear-gradient(90deg,#c9a96e,#e8d5a8,transparent);margin-bottom:2mm}
-.front-tagline{font-size:7pt;color:rgba(255,255,255,.45);font-weight:300;font-style:italic}
-.front-diamond{position:absolute;bottom:3mm;right:4mm;font-size:8px;color:rgba(201,169,110,.25);z-index:2}
+.card{width:85mm;height:55mm;border-radius:3mm;overflow:hidden;position:relative;border:2px solid #c9a96e}
 
-.back{background:linear-gradient(160deg,#faf8ff,#f5f0ff 50%,#ede9fe);color:#3e3555;display:flex;align-items:center}
-.back::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(139,92,246,.06),transparent 50%)}
-.back-content{display:flex;align-items:center;gap:4mm;padding:4mm 5mm;width:100%;position:relative;z-index:2}
-.back-left{flex:1}
-.back-title{font-family:'Cormorant Garamond',serif;font-size:11pt;font-weight:700;color:#1e1033;margin-bottom:.5mm}
-.back-subtitle{font-size:5pt;text-transform:uppercase;letter-spacing:2px;color:#8b5cf6;margin-bottom:2mm}
-.back-line{width:12mm;height:.5px;background:linear-gradient(90deg,#c9a96e,transparent);margin-bottom:2mm}
-.back-item{display:flex;align-items:center;gap:2mm;margin-bottom:1.5mm;font-size:7.5pt;color:#3e3555;font-weight:300}
-.back-item:last-child{margin-bottom:0}
-.back-ico{width:4.5mm;height:4.5mm;border-radius:1.2mm;background:linear-gradient(135deg,#ede9fe,#ddd6fe);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:.3px solid rgba(139,92,246,.12)}
-.back-ico svg{width:60%;height:60%;stroke:#7c3aed;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.back-qr-wrap{flex-shrink:0;text-align:center}
-.back-qr{width:18mm;height:18mm;border-radius:2mm;border:1.5px solid rgba(201,169,110,.25)}
-.back-scan{font-size:5pt;text-transform:uppercase;letter-spacing:1.5px;color:#8b5cf6;font-weight:500;margin-top:1mm}
+/* FRENTE */
+.front{background:#1e1033;color:#fff;display:flex;align-items:center}
+.front-in{display:flex;align-items:center;gap:5mm;padding:5mm 6mm;width:100%;position:relative}
+.front-photo{width:22mm;height:22mm;border-radius:50%;object-fit:cover;object-position:center 20%;border:1.5px solid #c9a96e;flex-shrink:0}
+.front-name{font-family:'Cormorant Garamond',serif;font-size:18pt;font-weight:700;color:#e8d5a8;line-height:1.1;margin-bottom:1mm}
+.front-sub2{font-size:6pt;text-transform:uppercase;letter-spacing:3px;color:#c4b5fd;margin-bottom:2.5mm}
+.front-line2{width:15mm;height:0.8px;background:#c9a96e;margin-bottom:2mm}
+.front-tag{font-size:7pt;color:rgba(255,255,255,.4);font-style:italic}
+.front-dia{position:absolute;bottom:3mm;right:4mm;font-size:8px;color:rgba(201,169,110,.3)}
 
-.label{font-size:8px;color:#999;text-align:center;margin-bottom:1mm;text-transform:uppercase;letter-spacing:3px}
-.cut-line{border:none;border-top:1px dashed #ccc;width:85mm;margin:0}
-.ornsvg path{stroke:#c9a96e}.ornsvg circle{fill:#c9a96e}
+/* DORSO */
+.dorso{background:#faf8ff;color:#3e3555;display:flex;align-items:center}
+.dorso-in{display:flex;align-items:center;gap:4mm;padding:4mm 5mm;width:100%}
+.dorso-left{flex:1}
+.dorso-title{font-family:'Cormorant Garamond',serif;font-size:11pt;font-weight:700;color:#1e1033;margin-bottom:.5mm}
+.dorso-sub{font-size:5pt;text-transform:uppercase;letter-spacing:2px;color:#8b5cf6;margin-bottom:2mm}
+.dorso-line{width:12mm;height:.5px;background:#c9a96e;margin-bottom:2mm}
+.dorso-item{display:flex;align-items:center;gap:2mm;margin-bottom:1.5mm;font-size:7.5pt;color:#3e3555;font-weight:300}
+.dorso-item:last-child{margin-bottom:0}
+.dorso-ico{width:4.5mm;height:4.5mm;border-radius:1mm;background:#ede9fe;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dorso-ico svg{width:60%;height:60%;stroke:#7c3aed;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.dorso-qr{width:18mm;height:18mm;border-radius:2mm;border:1.5px solid rgba(201,169,110,.3);flex-shrink:0}
+.dorso-scan{font-size:5pt;text-transform:uppercase;letter-spacing:1.5px;color:#8b5cf6;text-align:center;margin-top:1mm}
 </style></head><body>
 <h2>Tarjeta Personal — Valeria Batiz</h2>
-<p class="sub">Recortá por la línea punteada</p>
+<p class="sub">✂ Recortá por la línea punteada</p>
 
-<div class="label">▲ FRENTE ▲</div>
+<div class="label">▲ FRENTE</div>
 <div class="card front">
-  <div class="gold-frame"></div><div class="gold-inner"></div>
-  <div class="orn orn-tl"><svg class="ornsvg" viewBox="0 0 24 24"><path d="M2 22V8C2 4.7 4.7 2 8 2H22" fill="none" stroke-width="1"/><circle cx="2" cy="22" r="1.2"/></svg></div>
-  <div class="orn orn-br"><svg class="ornsvg" viewBox="0 0 24 24"><path d="M2 22V8C2 4.7 4.7 2 8 2H22" fill="none" stroke-width="1"/><circle cx="2" cy="22" r="1.2"/></svg></div>
-  <div class="front-content">
+  <div class="front-in">
     <img class="front-photo" src="${ph}" alt="VB">
     <div>
       <div class="front-name">Valeria Batiz</div>
-      <div class="front-sub">Presentación Personal</div>
-      <div class="front-line"></div>
-      <div class="front-tagline">"Compromiso, responsabilidad y buena predisposición"</div>
+      <div class="front-sub2">Presentación Personal</div>
+      <div class="front-line2"></div>
+      <div class="front-tag">"Compromiso, responsabilidad y buena predisposición"</div>
     </div>
-    <div class="front-diamond">❖</div>
+    <div class="front-dia">❖</div>
   </div>
 </div>
 
-<hr class="cut-line">
+<hr class="cut">
 
-<div class="label">▼ DORSO ▼</div>
-<div class="card back">
-  <div class="gold-frame"></div><div class="gold-inner"></div>
-  <div class="orn orn-tl"><svg class="ornsvg" viewBox="0 0 24 24"><path d="M2 22V8C2 4.7 4.7 2 8 2H22" fill="none" stroke-width="1"/><circle cx="2" cy="22" r="1.2"/></svg></div>
-  <div class="orn orn-br"><svg class="ornsvg" viewBox="0 0 24 24"><path d="M2 22V8C2 4.7 4.7 2 8 2H22" fill="none" stroke-width="1"/><circle cx="2" cy="22" r="1.2"/></svg></div>
-  <div class="back-content">
-    <div class="back-left">
-      <div class="back-title">Valeria Batiz</div>
-      <div class="back-subtitle">Datos de Contacto</div>
-      <div class="back-line"></div>
-      <div class="back-item"><div class="back-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>11 5492-4291</div>
-      <div class="back-item"><div class="back-ico"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>valubatiz@gmail.com</div>
-      <div class="back-item"><div class="back-ico"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>H. Yrigoyen 1584, Quilmes</div>
+<div class="label">▼ DORSO</div>
+<div class="card dorso">
+  <div class="dorso-in">
+    <div class="dorso-left">
+      <div class="dorso-title">Valeria Batiz</div>
+      <div class="dorso-sub">Datos de Contacto</div>
+      <div class="dorso-line"></div>
+      <div class="dorso-item"><div class="dorso-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>11 5492-4291</div>
+      <div class="dorso-item"><div class="dorso-ico"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>valubatiz@gmail.com</div>
+      <div class="dorso-item"><div class="dorso-ico"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>H. Yrigoyen 1584, Quilmes</div>
     </div>
-    <div class="back-qr-wrap">
-      <img class="back-qr" src="${qr}" alt="QR">
-      <div class="back-scan">Escaneá</div>
+    <div style="text-align:center;flex-shrink:0">
+      <img class="dorso-qr" src="${qr}" alt="QR">
+      <div class="dorso-scan">Escaneá</div>
     </div>
   </div>
 </div>
@@ -514,7 +502,7 @@ function printCards(){
   const w=window.open('','_blank');
   w.document.write(getCardsHTML());
   w.document.close();
-  setTimeout(()=>w.print(),600);
+  setTimeout(()=>w.print(),1500);
 }
 document.getElementById('cardsModal').addEventListener('click',function(e){if(e.target===this)closeCards()});
 
